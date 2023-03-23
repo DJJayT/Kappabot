@@ -1,0 +1,4 @@
+/vendor/*
+env.json
+.idea/
+tools/HelperDocs.md

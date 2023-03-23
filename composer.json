@@ -1,0 +1,27 @@
+{
+    "require": {
+        "team-reflex/discord-php": "dev-master",
+        "commandstring/env": "^1.0",
+        "symfony/console": "^6.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Common\\": "./Common/",
+            "Commands\\": "./Commands/",
+            "Events\\": "./Events/",
+            "Interactions\\": "./Interactions/",
+            "Console\\": "./Console"
+        },
+        "files": [
+            "./Common/Helpers.php"
+        ]
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+    "scripts": {
+        "cs": "./vendor/bin/phpcs --standard=psr12 ./Commands ./Common ./Events ./Interactions ./index.php",
+        "csf": "./vendor/bin/phpcbf --standard=psr12 ./Commands ./Common ./Events ./Interactions ./index.php",
+        "generate-helper-docs": "php ./tools/generateHelperDocs.php"
+    }
+}
