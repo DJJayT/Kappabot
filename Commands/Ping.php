@@ -13,7 +13,7 @@ class Ping extends BaseCommand
 
     public static function handler(Interaction $interaction): void
     {
-        $interaction->respondWithMessage(messageWithContent("Ping :ping_pong:"), true);
+        $interaction->respondWithMessage(messageWithContent("Pong :ping_pong:"));
     }
 
     public static function getConfig(): CommandBuilder|array
