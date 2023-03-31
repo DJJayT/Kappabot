@@ -15,11 +15,35 @@ $env->discord = new Discord([
     "intents" => Intents::getDefaultIntents()
 ]);
 
-//Commands
-$env->commands = [
-    Commands\Ping::class,
-    Commands\Guild::class
+//All commands related to the bots-administration
+$botCommands = [
+    \Commands\Bot\Shutdown::class,
 ];
+
+//All commands related to music
+$musicCommands = [
+    \Commands\Music\Play::class,
+    \Commands\Music\Disconnect::class,
+];
+
+$modCommands = [
+    \Commands\Mod\Clear::class,
+];
+
+//All commands related for testing (beginning commands)
+$testCommands = [
+    Commands\Ping::class,
+    Commands\Guild::class,
+    Commands\HelloWorld::class,
+];
+
+//Commands
+$env->commands = array_merge(
+    $botCommands,
+    $musicCommands,
+    $modCommands,
+    $testCommands
+);
 
 //Events
 $env->events = [

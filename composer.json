@@ -10,13 +10,16 @@
             "Commands\\": "./Commands/",
             "Events\\": "./Events/",
             "Interactions\\": "./Interactions/",
-            "Console\\": "./Console"
+            "Console\\": "./Console",
+            "Database\\": "./Database"
         },
         "files": [
             "./Common/Helpers.php"
         ]
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest"
+        ,
         "squizlabs/php_codesniffer": "^3.7"
     },
     "scripts": {

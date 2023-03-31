@@ -4,12 +4,13 @@ namespace Commands;
 
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Interaction;
+use function Common\messageWithContent;
 
-class Example extends BaseCommand {
-    protected static string $guild = "";
-    protected static array|string $name = "Example";
+class HelloWorld extends BaseCommand {
+    protected static array|string $name = "helloworld";
     
     public static function handler(Interaction $interaction): void {
+        $interaction->respondWithMessage(messageWithContent("Hello World!"));
     }
     
     public static function autocomplete(Interaction $interaction): void {
@@ -18,6 +19,6 @@ class Example extends BaseCommand {
     public static function getConfig(): CommandBuilder|array {
         return (new CommandBuilder())
             ->setName(self::getBaseCommandName())
-            ->setDescription("Example Command");
+            ->setDescription("Hello World Command");
     }
 }
