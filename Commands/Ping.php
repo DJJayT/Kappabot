@@ -5,12 +5,16 @@ namespace Commands;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Interaction;
 
+use function Common\getDiscord;
 use function Common\messageWithContent;
 
 class Ping extends BaseCommand {
     protected static string|array $name = "ping";
     
     public static function handler(Interaction $interaction): void {
+        $discord = getDiscord();
+        $discord->application->commands->
+        
         $interaction->respondWithMessage(messageWithContent("Pong :ping_pong:"));
     }
     

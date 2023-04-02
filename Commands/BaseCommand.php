@@ -65,12 +65,15 @@ abstract class BaseCommand {
     
     public static function save(): ExtendedPromiseInterface {
         $config = static::getConfig();
+        $configArray = $config;
         
-        if ($config instanceof CommandBuilder) {
-            $config = $config->toArray();
+        if ($configArray instanceof CommandBuilder) {
+            $configArray = $config->toArray();
         }
         
-        $command = new Command(Env::get()->discord, $config);
+        $command = new Command(Env::get()->discord, $configArray);
+        
+        $command->dm_permission = $config->dm_permission ?? false;
         
         /** @var Discord $discord */
         $discord = Env::get()->discord;

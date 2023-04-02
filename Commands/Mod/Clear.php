@@ -19,7 +19,7 @@ class Clear extends BaseCommand {
         $messageCount = $interaction->data->options->offsetGet('amount')?->value ?? 10;
         $channelId = $interaction->channel_id;
         
-        if($messageCount > 100) {
+        if ($messageCount > 100) {
             $interaction->respondWithMessage(messageWithContent("Maximum of 100 messages"), true);
             return;
         }
@@ -27,14 +27,19 @@ class Clear extends BaseCommand {
         $discord = getDiscord();
         try {
             $discord->getChannel($channelId)
-                ->getMessageHistory($messageCount)->done(function($messages) {
-                    var_dump($messages);
+                ->getMessageHistory(['limit' => $messageCount])
+                ->done(function ($messages) use ($discord, $channelId, $interaction, $messageCount) {
+                    $discord->getChannel($channelId)
+                        ->deleteMessages($messages)
+                        ->done(function () use ($interaction, $messageCount) {
+                            $interaction->respondWithMessage(messageWithContent("The last $messageCount messages were deleted"),
+                                true);
+                        });
                 });
-        } catch(NoPermissionsException $e) {
-            $interaction->respondWithMessage(messageWithContent("The bot doesn't have the permissions to do that"), true);
+        } catch (NoPermissionsException) {
+            $interaction->respondWithMessage(messageWithContent("The bot doesn't have the permissions to do that"),
+                true);
         }
-        
-        $interaction->respondWithMessage(messageWithContent("Shalom"), false);
     }
     
     public static function getConfig(): CommandBuilder|array {

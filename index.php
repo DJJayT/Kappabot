@@ -12,7 +12,8 @@ $env = Env::createFromJsonFile("./env.json");
 //Discord
 $env->discord = new Discord([
     "token" => $env->token,
-    "intents" => Intents::getDefaultIntents()
+    "intents" => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS,
+    "loadAllMembers" => true,
 ]);
 
 //All commands related to the bots-administration

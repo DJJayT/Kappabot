@@ -16,25 +16,21 @@ use Discord\Parts\Interactions\Interaction;
 /**
  * Create a new Option used for building slash commands
  */
-function newSlashCommandOption(string $name, string $description, int $type, bool $required = false): Option
-{
+function newSlashCommandOption(string $name, string $description, int $type, bool $required = false): Option {
     return newDiscordPart(Option::class)
         ->setName($name)
         ->setDescription($description)
         ->setType($type)
-        ->setRequired($required)
-    ;
+        ->setRequired($required);
 }
 
 /**
  * Create a new Choice used for building slash commands
  */
-function newSlashCommandChoice(string $name, float|int|string $value): Choice
-{
+function newSlashCommandChoice(string $name, float|int|string $value): Choice {
     return newDiscordPart(Choice::class)
         ->setName($name)
-        ->setValue($value)
-    ;
+        ->setValue($value);
 }
 
 /**
@@ -44,8 +40,7 @@ function newSlashCommandChoice(string $name, float|int|string $value): Choice
  * $embed = newDiscordPart("\Discord\Parts\Embed\Embed);
  * ```
  */
-function newDiscordPart(string $class, mixed ...$args): mixed
-{
+function newDiscordPart(string $class, mixed ...$args): mixed {
     return (new $class(Env::get()->discord, ...$args));
 }
 
@@ -56,9 +51,9 @@ function newDiscordPart(string $class, mixed ...$args): mixed
  * $message = messageWithContent("Hello World");
  * ```
  */
-function messageWithContent(string $content): MessageBuilder
-{
-    return MessageBuilder::new()->setContent($content);
+function messageWithContent(string $content): MessageBuilder {
+    return MessageBuilder::new()
+        ->setContent($content);
 }
 
 /**
@@ -79,14 +74,13 @@ function messageWithContent(string $content): MessageBuilder
  * );
  * ```
  */
-function buildActionRowWithButtons(Button ...$buttons): ActionRow
-{
+function buildActionRowWithButtons(Button ...$buttons): ActionRow {
     $actionRow = new ActionRow();
-
+    
     foreach ($buttons as $button) {
         $actionRow->addComponent($button);
     }
-
+    
     return $actionRow;
 }
 
@@ -97,8 +91,7 @@ function buildActionRowWithButtons(Button ...$buttons): ActionRow
  * $button = newButton(Button::STYLE_DANGER, "Kick User", "Kick|Command_String");
  * ```
  */
-function newButton(int $style, string $label, ?string $custom_id = null): Button
-{
+function newButton(int $style, string $label, ?string $custom_id = null): Button {
     return (new Button($style, $custom_id))->setLabel($label);
 }
 
@@ -119,25 +112,24 @@ function newButton(int $style, string $label, ?string $custom_id = null): Button
  * $user = getOptionFromInteraction($interaction->data->options, "ban", "user");
  * ```
  */
-function getOptionFromInteraction(Collection|Interaction $options, string ...$names): Option|null
-{
+function getOptionFromInteraction(Collection|Interaction $options, string ...$names): Option|null {
     if ($options instanceof Interaction) {
         $options = $options->data->options;
     }
-
+    
     $option = null;
     foreach ($names as $key => $name) {
         $option = $options->get("name", $name);
-
+        
         if ($key !== count($names) - 1) {
             $options = $option?->options;
         }
-
+        
         if ($options === null || $option === null) {
             break;
         }
     }
-
+    
     return $option;
 }
 
@@ -157,21 +149,19 @@ function getOptionFromInteraction(Collection|Interaction $options, string ...$na
  * $emptyField = emptyEmbedField();
  * ```
  */
-function emptyEmbedField(?Embed $embed = null): array|Embed
-{
+function emptyEmbedField(?Embed $embed = null): array|Embed {
     $emptyField = ["name" => "\u{200b}", "value" => "\u{200b}"];
-
+    
     if ($embed !== null) {
         return $embed->addField($emptyField);
     }
-
+    
     return $emptyField;
 }
 
 /**
  * Retrieve the `\Discord\Discord` instance from Environment
  */
-function getDiscord(): Discord
-{
+function getDiscord(): Discord {
     return Env::get()->discord;
 }
