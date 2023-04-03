@@ -12,9 +12,6 @@ class Ping extends BaseCommand {
     protected static string|array $name = "ping";
     
     public static function handler(Interaction $interaction): void {
-        $discord = getDiscord();
-        $discord->application->commands->
-        
         $interaction->respondWithMessage(messageWithContent("Pong :ping_pong:"));
     }
     

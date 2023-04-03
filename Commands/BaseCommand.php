@@ -73,7 +73,9 @@ abstract class BaseCommand {
         
         $command = new Command(Env::get()->discord, $configArray);
         
-        $command->dm_permission = $config->dm_permission ?? false;
+        if(isset($config->dm_permission)) {
+            $command->dm_permission = $config->dm_permission;
+        }
         
         /** @var Discord $discord */
         $discord = Env::get()->discord;

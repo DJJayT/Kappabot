@@ -15,6 +15,13 @@ class Clear extends BaseCommand {
     
     protected static string|array $name = "clear";
     
+    /***
+     * Handles the clear command
+     * Deletes the last x messages in the channel
+     * @param Interaction $interaction
+     * @return void
+     * @throws NoPermissionsException
+     */
     public static function handler(Interaction $interaction): void {
         $messageCount = $interaction->data->options->offsetGet('amount')?->value ?? 10;
         $channelId = $interaction->channel_id;
@@ -25,21 +32,25 @@ class Clear extends BaseCommand {
         }
         
         $discord = getDiscord();
-        try {
-            $discord->getChannel($channelId)
-                ->getMessageHistory(['limit' => $messageCount])
-                ->done(function ($messages) use ($discord, $channelId, $interaction, $messageCount) {
-                    $discord->getChannel($channelId)
-                        ->deleteMessages($messages)
-                        ->done(function () use ($interaction, $messageCount) {
-                            $interaction->respondWithMessage(messageWithContent("The last $messageCount messages were deleted"),
-                                true);
-                        });
-                });
-        } catch (NoPermissionsException) {
-            $interaction->respondWithMessage(messageWithContent("The bot doesn't have the permissions to do that"),
-                true);
-        }
+        $discord->getChannel($channelId)
+            ->getMessageHistory(['limit' => $messageCount])
+            ->otherwise(function () use ($interaction) {
+                $interaction->respondWithMessage(messageWithContent("The bot doesn't have the permissions to read the channels messages"),
+                    true);
+            })
+            ->done(function ($messages) use ($discord, $channelId, $interaction, $messageCount) {
+                $discord->getChannel($channelId)
+                    ->deleteMessages($messages)
+                    ->otherwise(function () use ($interaction) {
+                        $interaction->respondWithMessage(messageWithContent("The bot doesn't have the permissions to delete messages"),
+                            true);
+                    })
+                    ->done(function () use ($interaction, $messageCount) {
+                        $interaction->respondWithMessage(messageWithContent("The last $messageCount messages were deleted"),
+                            true);
+                    });
+            });
+        
     }
     
     public static function getConfig(): CommandBuilder|array {
