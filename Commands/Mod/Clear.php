@@ -7,7 +7,7 @@ use Discord\Builders\CommandBuilder;
 use Discord\Http\Exceptions\NoPermissionsException;
 use Discord\Parts\Interactions\Command\Option;
 use Discord\Parts\Interactions\Interaction;
-use Discord\Parts\Permissions\Permission;
+use Discord\Parts\Permissions\RolePermission;
 use function Common\getDiscord;
 use function Common\messageWithContent;
 
@@ -54,11 +54,14 @@ class Clear extends BaseCommand {
     }
     
     public static function getConfig(): CommandBuilder|array {
+        $permissions = new RolePermission(getDiscord());
+        $permissions->manage_messages = true;
+        
         return (new CommandBuilder())
             ->setName(self::getBaseCommandName())
             ->setDescription("Remove messages")
             ->setDmPermission(false)
-            ->setDefaultMemberPermissions(Permission::TEXT_PERMISSIONS['manage_messages'])
+            ->setDefaultMemberPermissions($permissions->bitwise)
             ->addOption((new Option(getDiscord()))
                 ->setName('amount')
                 ->setDescription("How much messages should be removed")

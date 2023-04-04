@@ -5,6 +5,7 @@ namespace Commands\Music;
 use Commands\BaseCommand;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Interaction;
+use Discord\Parts\Permissions\RolePermission;
 use function Common\getDiscord;
 use function Common\messageWithContent;
 
@@ -26,9 +27,12 @@ class Disconnect extends BaseCommand {
     }
     
     public static function getConfig(): CommandBuilder|array {
+        $permissions = new RolePermission(getDiscord());
+        $permissions->move_members = true;
         return (new CommandBuilder())
             ->setName(self::getBaseCommandName())
             ->setDescription("Disconnects from the voice channel")
-            ->setDmPermission(false);
+            ->setDmPermission(false)
+            ->setDefaultMemberPermissions($permissions->bitwise);
     }
 }
