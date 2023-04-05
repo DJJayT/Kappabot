@@ -18,19 +18,37 @@ class Play extends BaseCommand {
         $guild = $interaction->guild_id;
         $link = $interaction->data->options->offsetGet('url')->value;
         $discord = getDiscord();
-        $botVoiceChannel = $discord->getVoiceClient($guild);
+        $botVoiceClient = $discord->getVoiceClient($guild);
         echo "Link Option: " . $link;
         
-        if (isset($voiceChannel) && !isset($botVoiceChannel)) {
-            $discord->joinVoiceChannel($voiceChannel)->done(function() use ($interaction) {
-                $interaction->respondWithMessage(messageWithContent("Joined Channel - WIP"), true);
+        if (isset($voiceChannel) && !isset($botVoiceClient)) {
+            $discord->joinVoiceChannel($voiceChannel)->done(function() use ($interaction, $guild, $link) {
+                Play::playTrack($interaction, $guild, $link);
             });
             
-        } else if(isset($botVoiceChannel)) {
-            $interaction->respondWithMessage(messageWithContent("The bot is already in a channel!"), true);
+        } else if(isset($botVoiceClient)) {
+            Play::playTrack($interaction, $guild, $link);
         } else {
             $interaction->respondWithMessage(messageWithContent("You're not in a voice channel!"), true);
         }
+    }
+    
+    public static function playTrack(Interaction $interaction, string $guild, string $link) {
+        $discord = getDiscord();
+        $botVoiceClient = $discord->getVoiceClient($guild);
+        
+        if(!isset($botVoiceClient)) {
+            $interaction->respondWithMessage(messageWithContent("Something went wrong"), true);
+        }
+        
+        $songText = "Hier könnte Ihre Werbung stehen!";
+        
+        $botVoiceClient->playFile(__DIR__ . "\laylow.mp3")->otherwise(function() use ($interaction) {
+            $interaction->respondWithMessage(messageWithContent("There is currently a song playing - Queue not implemented yet"), false);
+        });
+    
+        $interaction->respondWithMessage(messageWithContent("Now Playing: $songText"), false);
+        //$botVoiceClient->start();
     }
     
     public static function getConfig(): CommandBuilder|array {
