@@ -11,7 +11,7 @@
             "Events\\": "./Events/",
             "Interactions\\": "./Interactions/",
             "Console\\": "./Console",
-            "Database\\": "./Database"
+            "Database\\": "./Database/"
         },
         "files": [
             "./Common/Helpers.php"

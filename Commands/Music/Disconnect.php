@@ -20,7 +20,7 @@ class Disconnect extends BaseCommand {
         
         if (isset($voiceClient)) {
             $voiceClient->close();
-            $interaction->respondWithMessage(messageWithContent("Disconnected successfully"), true);
+            $interaction->respondWithMessage(messageWithContent("Disconnected successfully"), false);
         } else {
             $interaction->respondWithMessage(messageWithContent("The bot is not in a voice channel!"), true);
         }

@@ -25,6 +25,11 @@ $botCommands = [
 $musicCommands = [
     \Commands\Music\Play::class,
     \Commands\Music\Disconnect::class,
+    \Commands\Music\Dc::class,
+    \Commands\Music\Pause::class,
+    \Commands\Music\Volume::class,
+    \Commands\Music\Connect::class,
+    \Commands\Music\Stop::class,
 ];
 
 $modCommands = [

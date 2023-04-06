@@ -18,35 +18,44 @@ class Play extends BaseCommand {
         $guild = $interaction->guild_id;
         $link = $interaction->data->options->offsetGet('url')->value;
         $discord = getDiscord();
-        $botVoiceClient = $discord->getVoiceClient($guild);
-        echo "Link Option: " . $link;
+        $voiceClient = $discord->getVoiceClient($guild);
         
-        if (isset($voiceChannel) && !isset($botVoiceClient)) {
-            $discord->joinVoiceChannel($voiceChannel)->done(function() use ($interaction, $guild, $link) {
-                Play::playTrack($interaction, $guild, $link);
-            });
+        if (isset($voiceChannel) && !isset($voiceClient)) {
+            $discord->joinVoiceChannel($voiceChannel)
+                ->done(function () use ($interaction, $guild, $link) {
+                    Play::playTrack($interaction, $guild, $link);
+                });
             
-        } else if(isset($botVoiceClient)) {
+        } else if (isset($voiceClient)) {
             Play::playTrack($interaction, $guild, $link);
         } else {
             $interaction->respondWithMessage(messageWithContent("You're not in a voice channel!"), true);
         }
     }
     
-    public static function playTrack(Interaction $interaction, string $guild, string $link) {
+    public static function playTrack(Interaction $interaction, string $guild, string $link): void {
         $discord = getDiscord();
-        $botVoiceClient = $discord->getVoiceClient($guild);
+        $voiceClient = $discord->getVoiceClient($guild);
         
-        if(!isset($botVoiceClient)) {
+        if (!isset($voiceClient)) {
             $interaction->respondWithMessage(messageWithContent("Something went wrong"), true);
         }
         
+        echo PHP_EOL . "Link Option: " . $link . PHP_EOL;
+        
         $songText = "Hier könnte Ihre Werbung stehen!";
         
-        $botVoiceClient->playFile(__DIR__ . "\laylow.mp3")->otherwise(function() use ($interaction) {
-            $interaction->respondWithMessage(messageWithContent("There is currently a song playing - Queue not implemented yet"), false);
-        });
-    
+        $ffmpegArgs = [
+        
+        ];
+        
+        //$voiceClient->ffmpegEncode(null, $ffmpegArgs);
+        //$voiceClient->playOggStream();
+        
+        //$voiceClient->playFile()->otherwise(function() use ($interaction) {
+        //    $interaction->respondWithMessage(messageWithContent("There is currently a song playing - Queue not implemented yet"), false);
+        //});
+        
         $interaction->respondWithMessage(messageWithContent("Now Playing: $songText"), false);
         //$botVoiceClient->start();
     }
