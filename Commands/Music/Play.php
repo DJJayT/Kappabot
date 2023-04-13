@@ -6,6 +6,10 @@ use Commands\BaseCommand;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Command\Option;
 use Discord\Parts\Interactions\Interaction;
+use PHP_CodeSniffer\Tokenizers\PHP;
+use React\Stream\ReadableResourceStream;
+use YoutubeDl\Options;
+use YoutubeDl\YoutubeDl;
 use function Common\getDiscord;
 use function Common\messageWithContent;
 
@@ -41,22 +45,35 @@ class Play extends BaseCommand {
             $interaction->respondWithMessage(messageWithContent("Something went wrong"), true);
         }
         
-        echo PHP_EOL . "Link Option: " . $link . PHP_EOL;
+        $yt = new YoutubeDl();
+        $yt->setBinPath('yt-dlp');
+        $video = $yt->download(Options::create()
+            ->downloadPath(__DIR__)
+            ->url($link)
+            ->skipDownload(true)
+            ->extractAudio(true)
+            ->audioFormat('mp3')
+            ->audioQuality('0') // best
+        );
         
-        $songText = "Hier könnte Ihre Werbung stehen!";
+        $video = $video->getVideos()[0];
+        $videoLink = $video->getUrl();
+        $songTitle = $video->getTitle();
         
-        $ffmpegArgs = [
+        echo "Songtitel: " . $songTitle;
         
-        ];
+        $stream = $voiceClient->ffmpegEncode($videoLink);
         
-        //$voiceClient->ffmpegEncode(null, $ffmpegArgs);
-        //$voiceClient->playOggStream();
+        $voiceClient->playOggStream($stream);
         
-        //$voiceClient->playFile()->otherwise(function() use ($interaction) {
+        //$testFile = __DIR__ . '\laylow.mp3';
+        //$songTitle = 'Moin Tobi';
+        
+        //$voiceClient->playFile($testFile)->otherwise(function() use ($interaction) {
         //    $interaction->respondWithMessage(messageWithContent("There is currently a song playing - Queue not implemented yet"), false);
         //});
         
-        $interaction->respondWithMessage(messageWithContent("Now Playing: $songText"), false);
+        $interaction->respondWithMessage(messageWithContent("Now Playing: $songTitle"), false);
         //$botVoiceClient->start();
     }
     
