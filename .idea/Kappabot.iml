@@ -9,7 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/./Console" isTestSource="false" packagePrefix="Console\" />
       <sourceFolder url="file://$MODULE_DIR$/./Events" isTestSource="false" packagePrefix="Events\" />
       <sourceFolder url="file://$MODULE_DIR$/./Interactions" isTestSource="false" packagePrefix="Interactions\" />
-      <sourceFolder url="file://$MODULE_DIR$/./Database" isTestSource="false" packagePrefix="Database\Test\" />
+      <sourceFolder url="file://$MODULE_DIR$/./Database" isTestSource="false" packagePrefix="Database\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/service-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/string" />

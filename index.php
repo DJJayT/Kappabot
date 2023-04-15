@@ -5,6 +5,45 @@ use Discord\Discord;
 use Discord\WebSockets\Intents;
 
 require_once __DIR__ . "/vendor/autoload.php";
+$rootDir = __DIR__;
+
+function delete_directory($dirname) {
+    if (is_dir($dirname))
+        $dir_handle = opendir($dirname);
+    if (!$dir_handle)
+        return false;
+    while ($file = readdir($dir_handle)) {
+        if ($file !== "." && $file !== "..") {
+            if (!is_dir($dirname . "/" . $file))
+                unlink($dirname . "/" . $file);
+            else
+                delete_directory($dirname . '/' . $file);
+        }
+    }
+    closedir($dir_handle);
+    rmdir($dirname);
+    return true;
+}
+
+define('__ROOT__', $rootDir);
+
+
+if (is_dir(__DIR__ . '/temp/music')) {
+    delete_directory(__DIR__ . '/temp/music');
+    if (!mkdir($concurrentDirectory = __DIR__ . '/temp/music') && !is_dir($concurrentDirectory)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+    }
+}
+
+//Create temp folder
+if (!is_dir(__DIR__ . '/temp')) {
+    if (!mkdir(__DIR__ . '/temp') && !is_dir(__DIR__ . '/temp')) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', __DIR__ . '/temp'));
+    }
+    if (!mkdir($concurrentDirectory = __DIR__ . '/temp/music') && !is_dir($concurrentDirectory)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', __DIR__ . '/temp/music/'));
+    }
+}
 
 //Env
 $env = Env::createFromJsonFile("./env.json");

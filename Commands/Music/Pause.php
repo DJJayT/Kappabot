@@ -5,7 +5,6 @@ namespace Commands\Music;
 use Commands\BaseCommand;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Interaction;
-use Discord\Parts\Permissions\RolePermission;
 use function Common\getDiscord;
 use function Common\messageWithContent;
 
