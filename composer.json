@@ -1,6 +1,7 @@
 {
     "name": "djjayt/kappabot",
     "description": "A Discord bot made by DJJayT.",
+    "license": "MIT",
     "require": {
         "team-reflex/discord-php": "dev-master",
         "commandstring/env": "^1.0",
