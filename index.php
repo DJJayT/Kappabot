@@ -7,11 +7,13 @@ use Discord\WebSockets\Intents;
 require_once __DIR__ . "/vendor/autoload.php";
 $rootDir = __DIR__;
 
-function delete_directory($dirname) {
-    if (is_dir($dirname))
+function delete_directory($dirname): bool {
+    if (is_dir($dirname)) {
         $dir_handle = opendir($dirname);
-    if (!$dir_handle)
+    }
+    if (!$dir_handle) {
         return false;
+    }
     while ($file = readdir($dir_handle)) {
         if ($file !== "." && $file !== "..") {
             if (!is_dir($dirname . "/" . $file))
